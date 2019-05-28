@@ -352,7 +352,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
       }
     };
     childCount(0, root);
-    var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
+    var newHeight = d3.max(levelWidth) * 100; // 25 pixels per line
     tree = tree.size([newHeight, viewerWidth]);
 
     // Compute the new tree layout.
@@ -382,9 +382,11 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     })
     .on('click', click);
 
-    nodeEnter.append("circle")
+    nodeEnter.append("rect")
     .attr('class', 'nodeCircle')
-    .attr("r", 0)
+    .attr("rx", 5)
+    .attr("width", 100)
+    .attr("height", 50)
     .style("fill", function(d) {
       return d._children ? "lightsteelblue" : "#fff";
     });
@@ -432,6 +434,10 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     // Change the circle fill depending on whether it has children and is collapsed
     node.select("circle.nodeCircle")
     .attr("r", 4.5)
+    .style("fill", function(d) {
+      return d._children ? "lightsteelblue" : "#fff";
+    });
+    node.select("rect.nodeCircle")
     .style("fill", function(d) {
       return d._children ? "lightsteelblue" : "#fff";
     });

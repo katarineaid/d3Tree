@@ -1,5 +1,6 @@
 {
   "name": "flare",
+  "id": "123-123",
   "children": [
     {
       "name": "analytics",
