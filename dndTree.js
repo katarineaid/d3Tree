@@ -349,6 +349,60 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     centerNode(d);
   }
 
+  function mouseovered(link){
+    if (d3.event.defaultPrevented) return; // click suppressed
+
+    let node = svgGroup.selectAll("g.node")
+    .data(link, function(d) {
+      return d.id || (d.id = ++i);
+    });
+
+    let data = [{
+      source: {
+        x: link.source.y0,
+        y: link.source.x0
+      },
+      target: {
+        x: link.target.y0,
+        y: link.target.x0
+      }
+    }];
+
+    let highlightLink = svgGroup.selectAll(".templink").data(data);
+
+    highlightLink.enter().append("path")
+    .attr("class", "highlight")
+    .attr("d", d3.svg.diagonal())
+    .attr('pointer-events', 'none');
+
+    highlightLink.attr("d", d3.svg.diagonal());
+
+    highlightLink.exit().remove();
+
+  }
+
+
+  function mouseouted(link){
+    if (d3.event.defaultPrevented) return; // click suppressed
+
+    let node = svgGroup.selectAll("g.node")
+    .data(link, function(d) {
+      return d.id || (d.id = ++i);
+    });
+
+    let highlightLink = svgGroup.selectAll(".templink").data(data);
+
+    highlightLink.enter().append("path")
+    .attr("class", "highlight")
+    .attr("d", d3.svg.diagonal())
+    .attr('pointer-events', 'none');
+
+    highlightLink.attr("d", d3.svg.diagonal());
+
+    highlightLink.exit().remove();
+
+  }
+
   // Toggle children on click.
 
   function click(d) {
@@ -428,6 +482,9 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
       return "translate(50,0)";
     })
     .on('click', clickChildren);
+
+    nodeEnter.append("p")
+
 
     nodeEnter.append("text")
     .attr("x", function(d) {
@@ -509,6 +566,8 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     // Enter any new links at the parent's previous position.
     link.enter().insert("path", "g")
     .attr("class", "link")
+    .on("mouseover", mouseovered)
+    .on("mouseout", mouseouted)
     .attr("d", function(d) {
       var o = {
         x: source.x0,
