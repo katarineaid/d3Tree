@@ -326,11 +326,21 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     return d;
   }
 
+  function toggleParrent(d){
+    if(d.id === root.id){
+      root = treeData
+    } else {
+      root = d
+    }
+    return root;
+  }
+
   // Toggle children on click.
 
   function click(d) {
     if (d3.event.defaultPrevented) return; // click suppressed
-    d = toggleChildren(d);
+    //d = toggleChildren(d);
+    d = toggleParrent(d);
     update(d);
     centerNode(d);
   }
@@ -385,8 +395,8 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     nodeEnter.append("rect")
     .attr('class', 'nodeCircle')
     .attr("rx", 5)
-    .attr("width", 100)
-    .attr("height", 50)
+    .attr("width", 50)
+    .attr("height", 20)
     .style("fill", function(d) {
       return d._children ? "lightsteelblue" : "#fff";
     });
