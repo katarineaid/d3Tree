@@ -385,7 +385,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
 
     // Enter any new nodes at the parent's previous position.
     var nodeEnter = node.enter().append("g")
-    .call(dragListener)
+    //.call(dragListener)
     .attr("class", "node")
     .attr("transform", function(d) {
       return "translate(" + source.y0 + "," + source.x0 + ")";
