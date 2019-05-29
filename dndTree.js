@@ -335,12 +335,26 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     return root;
   }
 
+  function clickParent(d){
+    if (d3.event.defaultPrevented) return; // click suppressed
+    d = toggleParrent(d);
+    update(d);
+    centerNode(d);
+  }
+
+  function clickChildren(d){
+    if (d3.event.defaultPrevented) return; // click suppressed
+    d = toggleChildren(d);
+    update(d);
+    centerNode(d);
+  }
+
   // Toggle children on click.
 
   function click(d) {
     if (d3.event.defaultPrevented) return; // click suppressed
-    //d = toggleChildren(d);
-    d = toggleParrent(d);
+    d = toggleChildren(d);
+    // d = toggleParrent(d);
     update(d);
     centerNode(d);
   }
@@ -390,7 +404,6 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     .attr("transform", function(d) {
       return "translate(" + source.y0 + "," + source.x0 + ")";
     })
-    .on('click', click);
 
     nodeEnter.append("rect")
     .attr('class', 'nodeCircle')
@@ -401,11 +414,26 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
       return d._children ? "lightsteelblue" : "#fff";
     });
 
+    nodeEnter.append("circle")
+    .attr("r",5)
+    .style("fill", "steelblue")
+    .style("stroke", "red")
+    .on('click', clickParent);
+
+    nodeEnter.append("circle")
+    .attr("r",5)
+    .style("fill", "red")
+    .style("stroke", "steelblue")
+    .attr("transform", function(d) {
+      return "translate(50,0)";
+    })
+    .on('click', clickChildren);
+
     nodeEnter.append("text")
     .attr("x", function(d) {
       return d.children || d._children ? -10 : 10;
     })
-    .attr("dy", ".35em")
+    .attr("dy", 10)
     .attr('class', 'nodeText')
     .attr("text-anchor", function(d) {
       return d.children || d._children ? "end" : "start";
@@ -416,18 +444,18 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     .style("fill-opacity", 0);
 
     // phantom node to give us mouseover in a radius around it
-    nodeEnter.append("circle")
-    .attr('class', 'ghostCircle')
-    .attr("r", 30)
-    .attr("opacity", 0.2) // change this to zero to hide the target area
-    .style("fill", "red")
-    .attr('pointer-events', 'mouseover')
-    .on("mouseover", function(node) {
-      overCircle(node);
-    })
-    .on("mouseout", function(node) {
-      outCircle(node);
-    });
+    // nodeEnter.append("circle")
+    // .attr('class', 'ghostCircle')
+    // .attr("r", 30)
+    // .attr("opacity", 0.2) // change this to zero to hide the target area
+    // .style("fill", "red")
+    // .attr('pointer-events', 'mouseover')
+    // .on("mouseover", function(node) {
+    //   overCircle(node);
+    // })
+    // .on("mouseout", function(node) {
+    //   outCircle(node);
+    // });
 
     // Update the text to reflect whether node has children or not.
     node.select('text')
@@ -441,12 +469,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
       return d.name;
     });
 
-    // Change the circle fill depending on whether it has children and is collapsed
-    node.select("circle.nodeCircle")
-    .attr("r", 4.5)
-    .style("fill", function(d) {
-      return d._children ? "lightsteelblue" : "#fff";
-    });
+
     node.select("rect.nodeCircle")
     .style("fill", function(d) {
       return d._children ? "lightsteelblue" : "#fff";
