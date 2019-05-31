@@ -65,35 +65,6 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
   // Sort the tree initially incase the JSON isn't in a sorted order.
   sortTree();
 
-  // TODO: Pan function, can be better implemented.
-
-  function pan(domNode, direction) {
-    var speed = panSpeed;
-    if (panTimer) {
-      clearTimeout(panTimer);
-      translateCoords = d3.transform(svgGroup.attr("transform"));
-      if (direction == 'left' || direction == 'right') {
-        translateX = direction == 'left' ? translateCoords.translate[0] + speed : translateCoords.translate[0] - speed;
-        translateY = translateCoords.translate[1];
-      } else if (direction == 'up' || direction == 'down') {
-        translateX = translateCoords.translate[0];
-        translateY = direction == 'up' ? translateCoords.translate[1] + speed : translateCoords.translate[1] - speed;
-      }
-      scaleX = translateCoords.scale[0];
-      scaleY = translateCoords.scale[1];
-      scale = zoomListener.scale();
-      svgGroup.transition().attr("transform",
-        "translate(" + translateX + "," + translateY + ")scale(" + scale + ")");
-      d3.select(domNode).select('g.node').attr("transform",
-        "translate(" + translateX + "," + translateY + ")");
-      zoomListener.scale(zoomListener.scale());
-      zoomListener.translate([translateX, translateY]);
-      panTimer = setTimeout(function () {
-        pan(domNode, speed, direction);
-      }, 50);
-    }
-  }
-
   // Define the zoom function for the zoomable tree
 
   function zoom() {
@@ -219,17 +190,6 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     centerNode(d);
   }
 
-
-  // Toggle children on click.
-
-  function click(d) {
-    if (d3.event.defaultPrevented) return; // click suppressed
-    d = toggleChildren(d);
-    // d = toggleParrent(d);
-    update(d);
-    centerNode(d);
-  }
-
   function update(source) {
     // Compute the new height, function counts total children of root node and sets tree height accordingly.
     // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
@@ -299,9 +259,6 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       return "translate(50,0)";
     })
     .on('click', clickChildren);
-
-    nodeEnter.append("p")
-
 
     nodeEnter.append("text")
     .attr("x", function (d) {
