@@ -169,7 +169,7 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
 
   function toggleParrent(d) {
     if (d.id === root.id) {
-      root = treeData
+      root = d.parent || treeData
     } else {
       root = d
     }
@@ -245,20 +245,23 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       return d._children ? "lightsteelblue" : "#fff";
     });
 
+    /**СЛЕВА**/
     nodeEnter.append("circle")
+    .attr('class', 'nodeCircleParent')
     .attr("r", 5)
-    .style("fill", "steelblue")
-    .style("stroke", "red")
+    .style("fill", "green")
+    .style("stroke", "steelblue")
     .on('click', clickParent);
 
+    /**СПРАВА**/
     nodeEnter.append("circle")
+    .attr('class', 'nodeCircleChildren')
     .attr("r", 5)
-    .style("fill", "red")
-    .style("stroke", "steelblue")
     .attr("transform", function (d) {
       return "translate(50,0)";
     })
-    .on('click', clickChildren);
+    .style("stroke", "red")
+    .on('click', clickChildren)
 
     nodeEnter.append("text")
     .attr("x", function (d) {
@@ -302,6 +305,16 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
 
 
     node.select("rect.nodeCircle")
+    .style("fill", function (d) {
+      return d._children ? "lightsteelblue" : "#fff";
+    });
+    node.select("circle.nodeCircleParent")
+    .style("fill", function (d) {
+      return d.parent && !nodes.some((node) => {
+        return node.id === d.parent.id
+      }) ? "lightsteelblue" : "#fff";
+    });
+    node.select("circle.nodeCircleChildren")
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
     });
