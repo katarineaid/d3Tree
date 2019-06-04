@@ -1,25 +1,49 @@
 {
   "name": "flare",
-  "id": "1",
+  "type": "substation",
+  "typeProperty": "Объекты РСК",
+  "id": "518853fb-5c21-11e7-80e6-00155d0c0908",
+  "voltageClass": 110,
+  "left": true,
+  "right": false,
   "children": [
     {
       "name": "analytics",
-      "id": "2",
+      "type": "powerLine",
+      "typeProperty": "Объекты РСК",
+      "id": "518853fb-5c21-11e7-80e6-00155d0c0907",
+      "voltageClass": 110,
+      "left": true,
+      "right": true,
       "children": [
         {
           "name": "cluster",
-          "id": "3",
+          "type": "substation",
+          "typeProperty": "Объекты РСК",
+          "id": "012cea42-5c2a-11e7-80e6-00155d0c0907",
+          "voltageClass": 10,
+          "left": true,
+          "right": false,
           "children": [
             {
               "name": "AgglomerativeCluster",
-              "id": "4",
-              "size": 3938
+              "type": "pointsDelivery",
+              "typeProperty": "Объекты РСК",
+              "id": "8f7ba937-5c08-11e7-80e6-00155d0c0907",
+              "voltageClass": 10,
+              "left": true,
+              "right": false
             }
           ]
         },
         {
           "name": "graph",
-          "id": "5",
+          "type": "substation",
+          "typeProperty": "Объекты РСК",
+          "id": "012cea47-5c2a-11e7-80e6-00155d0c0907",
+          "voltageClass": 10,
+          "left": true,
+          "right": false,
           "children": [
           ]
         }

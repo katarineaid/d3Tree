@@ -1,6 +1,41 @@
 // Get JSON data
 treeJSON = d3.json("flare.json", function (error, treeData) {
 
+  const dictVoltageClass = {
+    1150: 'rgba(205,138,255,1)',
+    800: 'rgba(0,0,168,1)',
+    750: 'rgba(0,0,168,1)',
+    500: 'rgba(213,0,0,1)',
+    400: 'rgba(255,100,30,1)',
+    330: 'rgba(0,170,0,1)',
+    220: 'rgba(181,181,0,1)',
+    150: 'rgba(170,150,0,1)',
+    110: 'rgba(0,153,255,1)',
+    60: 'rgba(255,51,204,1)',
+    35: 'rgba(102,51,0,1)',
+    20: 'rgba(160,32,240,1)',
+    15: 'rgba(160,32,240,1)',
+    10: 'rgba(102,0,240,1)',
+    6: 'rgba(0,102,0,1)',
+    3: 'rgba(0,102,0,1)',
+    0: 'rgba(127,127,127,1)'
+  };
+  const dictRadius = {
+    'substation': 0,
+    'powerLine': 5,
+    'pointsDelivery': 20,
+  };
+  const dictWidth = {
+    'substation': 50,
+    'powerLine': 50,
+    'pointsDelivery': 20,
+  };
+  const dictHeight = {
+    'substation': 20,
+    'powerLine': 20,
+    'pointsDelivery': 20,
+  };
+
   // Calculate total nodes, max label length
   var totalNodes = 0;
   var maxLabelLength = 0;
@@ -133,7 +168,19 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     .attr("class", "highlight")
     .attr('pointer-events', 'none')
     .attr("d", function (d) {
-      return diagonal(data[0]);
+      let { source, target } = data[0];
+      let o_source = {
+        x: source.x + 10,
+        y: source.right ? source.y + 52 : source.y + 50
+      };
+      let o_target = {
+        x: target.x + 10,
+        y: target.left ? target.y - 5 : target.y
+      };
+      return diagonal({
+        source: o_source,
+        target: o_target
+      });
     });
 
     link.exit().remove();
@@ -213,7 +260,6 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
       links = tree.links(nodes);
-
     // Set widths between levels based on maxLabelLength.
     nodes.forEach(function (d) {
       d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
@@ -234,13 +280,20 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     .attr("class", "node")
     .attr("transform", function (d) {
       return "translate(" + source.y0 + "," + source.x0 + ")";
-    })
+    });
 
+    /**Прямоугольник для ПС/ВЛ/ТочкиПрис**/
     nodeEnter.append("rect")
     .attr('class', 'nodeCircle')
-    .attr("rx", 5)
-    .attr("width", 50)
-    .attr("height", 20)
+    .attr("rx", function (d) {
+      return dictRadius[d.type] || 0;
+    })
+    .attr("width", function (d) {
+      return dictWidth[d.type] || 50;
+    })
+    .attr("height", function (d) {
+      return dictHeight[d.type] || 20;
+    })
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
     });
@@ -249,8 +302,10 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     nodeEnter.append("circle")
     .attr('class', 'nodeCircleParent')
     .attr("r", 5)
-    .style("fill", "green")
     .style("stroke", "steelblue")
+    .attr("transform", function (d) {
+      return "translate(-5,0)";
+    })
     .on('click', clickParent);
 
     /**СПРАВА**/
@@ -258,11 +313,12 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     .attr('class', 'nodeCircleChildren')
     .attr("r", 5)
     .attr("transform", function (d) {
-      return "translate(50,0)";
+      return "translate(55,0)";
     })
     .style("stroke", "red")
-    .on('click', clickChildren)
+    .on('click', clickChildren);
 
+    /**ПОДПИСЬ узла**/
     nodeEnter.append("text")
     .attr("x", function (d) {
       return d.children || d._children ? -10 : 10;
@@ -277,20 +333,6 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     })
     .style("fill-opacity", 0);
 
-    // phantom node to give us mouseover in a radius around it
-    // nodeEnter.append("circle")
-    // .attr('class', 'ghostCircle')
-    // .attr("r", 30)
-    // .attr("opacity", 0.2) // change this to zero to hide the target area
-    // .style("fill", "red")
-    // .attr('pointer-events', 'mouseover')
-    // .on("mouseover", function(node) {
-    //   overCircle(node);
-    // })
-    // .on("mouseout", function(node) {
-    //   outCircle(node);
-    // });
-
     // Update the text to reflect whether node has children or not.
     node.select('text')
     .attr("x", function (d) {
@@ -303,18 +345,24 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       return d.name;
     });
 
-
+    /**Обновление свойств**/
     node.select("rect.nodeCircle")
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
     });
     node.select("circle.nodeCircleParent")
+    .attr("class", function (d) {
+      return d.type === 'pointsDelivery' ? "ghost" : "";
+    })
     .style("fill", function (d) {
       return d.parent && !nodes.some((node) => {
         return node.id === d.parent.id
       }) ? "lightsteelblue" : "#fff";
     });
     node.select("circle.nodeCircleChildren")
+    .attr("class", function (d) {
+      return d.type === 'pointsDelivery' ? "ghost" : "";
+    })
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
     });
@@ -353,6 +401,9 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     // Enter any new links at the parent's previous position.
     link.enter().insert("path", "g")
     .attr("class", "link")
+    .style('marker-start',
+      (d) => d.source.right ? `url(#start-arrow-${d.target.voltageClass})` : '')
+    .style('marker-end', (d) => d.target.left ? `url(#end-arrow-${d.target.voltageClass})` : '')
     .on("mouseover", overLine)
     .on("mouseout", outLine)
     .attr("d", function (d) {
@@ -364,12 +415,28 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
         source: o,
         target: o
       });
+    })
+    .style("stroke", function (d) {
+      return dictVoltageClass[d.target.voltageClass] || "#000"
     });
 
     // Transition links to their new position.
     link.transition()
     .duration(duration)
-    .attr("d", diagonal);
+    .attr("d", function (d) {
+      var o_source = {
+        x: d.source.x + 10,
+        y: d.source.right ? d.source.y + 52 : d.source.y + 50
+      };
+      var o_target = {
+        x: d.target.x + 10,
+        y: d.target.left ? d.target.y - 5 : d.target.y
+      };
+      return diagonal({
+        source: o_source,
+        target: o_target
+      });
+    });
 
     // Transition exiting nodes to the parent's new position.
     link.exit().transition()
@@ -404,4 +471,49 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
   // Layout the tree initially and center on the root node.
   update(root);
   centerNode(root);
+
+  // define arrow markers for graph links
+  baseSvg.append('svg:defs').append('svg:marker')
+  .attr('id', 'end-arrow-110')
+  .attr('viewBox', '0 -10 20 20')
+  .attr('refX', 6)
+  .attr('markerWidth', 5)
+  .attr('markerHeight', 5)
+  .attr('orient', 'auto')
+  .append('svg:path')
+  .attr('d', 'M0,-10L20,0L0,10')
+  .attr('fill', dictVoltageClass[110]);
+
+  baseSvg.append('svg:defs').append('svg:marker')
+  .attr('id', 'start-arrow-110')
+  .attr('viewBox', '0 -10 20 20')
+  .attr('refX', 4)
+  .attr('markerWidth', 5)
+  .attr('markerHeight', 5)
+  .attr('orient', 'auto')
+  .append('svg:path')
+  .attr('d', 'M20,-10L0,0L20,10')
+  .attr('fill', dictVoltageClass[110]);
+
+  baseSvg.append('svg:defs').append('svg:marker')
+  .attr('id', 'end-arrow-10')
+  .attr('viewBox', '0 -10 20 20')
+  .attr('refX', 6)
+  .attr('markerWidth', 5)
+  .attr('markerHeight', 5)
+  .attr('orient', 'auto')
+  .append('svg:path')
+  .attr('d', 'M0,-10L20,0L0,10')
+  .attr('fill', dictVoltageClass[10]);
+
+  baseSvg.append('svg:defs').append('svg:marker')
+  .attr('id', 'start-arrow-10')
+  .attr('viewBox', '0 -10 20 20')
+  .attr('refX', 4)
+  .attr('markerWidth', 5)
+  .attr('markerHeight', 5)
+  .attr('orient', 'auto')
+  .append('svg:path')
+  .attr('d', 'M20,-10L0,0L20,10')
+  .attr('fill', dictVoltageClass[10]);
 });
