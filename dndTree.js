@@ -331,15 +331,50 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     /**ПОДПИСЬ узла**/
     nodeEnter.append("text")
     .attr("x", function (d) {
-      return dictWidth[d.type] / 2 || 25;
+      return d.type === "pointsDelivery" ? maxLabelHeight * 10 || 20 : dictWidth[d.type] / 2 || 25;
     })
     .attr("dy", 10)
     .attr('class', 'nodeText')
     .attr("text-anchor", "middle")
     .text(function (d) {
-      return d.name;
+      return d.name
     })
+    .call(wrap, 20)
     .style("fill-opacity", 0);
+
+    function wrap(text, width) {
+      text.each(function () {
+        var text = d3.select(this);
+        let textForPrinting= text.text();
+        let position = 0;
+        let words=[];
+        while(position<textForPrinting.length){
+          words.push(textForPrinting.slice(position, position + 20));
+          position = position + 20;
+        }
+
+        words.reverse();
+        let word;
+        let line=[];
+        let lineNumber = 0;
+        let lineHeight = 1.1;
+        let x = text.attr("x");
+        let y = text.attr("y");
+        let dy = 12; //parseFloat(text.attr("dy")),
+        let tspan = text.text(null)
+          .append("tspan")
+          .attr("x", x)
+          .attr("y", y)
+          .attr("dy", dy);
+        while (word = words.pop()) {
+            tspan = text.append("tspan")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("dy", ++lineNumber + dy)
+            .text(word);
+        }
+      })
+    }
 
     /**Вторая подпись узла**/
     nodeEnter.append("text")
