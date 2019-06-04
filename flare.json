@@ -1,5 +1,5 @@
 {
-  "name": "flare",
+  "name": "ПС 110 кВ Мульничный ручей (ПС403)",
   "type": "substation",
   "typeProperty": "Объекты РСК",
   "id": "518853fb-5c21-11e7-80e6-00155d0c0908",
@@ -8,7 +8,7 @@
   "right": false,
   "children": [
     {
-      "name": "analytics",
+      "name": "ВЛ 110 кВ Мельничный Ручей - Щеглово (ВЛ 35 кВ Щегловская-2)",
       "type": "powerLine",
       "typeProperty": "Объекты РСК",
       "id": "518853fb-5c21-11e7-80e6-00155d0c0907",
@@ -17,7 +17,7 @@
       "right": true,
       "children": [
         {
-          "name": "cluster",
+          "name": "ПС 35 кВ Щеглово (ПС 631)",
           "type": "substation",
           "typeProperty": "Объекты РСК",
           "id": "012cea42-5c2a-11e7-80e6-00155d0c0907",
@@ -26,7 +26,7 @@
           "right": false,
           "children": [
             {
-              "name": "AgglomerativeCluster",
+              "name": "30",
               "type": "pointsDelivery",
               "typeProperty": "Объекты РСК",
               "id": "8f7ba937-5c08-11e7-80e6-00155d0c0907",
@@ -37,7 +37,7 @@
           ]
         },
         {
-          "name": "graph",
+          "name": "ПС 35 кВ Щеглово-№№№ (ПС 631)",
           "type": "substation",
           "typeProperty": "Объекты РСК",
           "id": "012cea47-5c2a-11e7-80e6-00155d0c0907",

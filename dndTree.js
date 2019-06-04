@@ -26,8 +26,8 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     'pointsDelivery': 20,
   };
   const dictWidth = {
-    'substation': 50,
-    'powerLine': 50,
+    'substation': 200,
+    'powerLine': 200,
     'pointsDelivery': 20,
   };
   const dictHeight = {
@@ -39,6 +39,7 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
   // Calculate total nodes, max label length
   var totalNodes = 0;
   var maxLabelLength = 0;
+  var maxLabelHeight = 0;
   // variables for drag/drop
   var selectedNode = null;
   var draggingNode = null;
@@ -83,6 +84,7 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
   visit(treeData, function (d) {
     totalNodes++;
     maxLabelLength = Math.max(d.name.length, maxLabelLength);
+    maxLabelHeight = Math.max(d.name.length / 20, maxLabelHeight);
 
   }, function (d) {
     return d.children && d.children.length > 0 ? d.children : null;
@@ -154,11 +156,13 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       data = [{
         source: {
           x: selectedNode.source.x0,
-          y: selectedNode.source.y0
+          y: selectedNode.source.y0,
+          type: selectedNode.source.type
         },
         target: {
           x: selectedNode.target.x0,
-          y: selectedNode.target.y0
+          y: selectedNode.target.y0,
+          type: selectedNode.target.type
         }
       }];
     }
@@ -169,12 +173,13 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     .attr('pointer-events', 'none')
     .attr("d", function (d) {
       let { source, target } = data[0];
+      let dSourceY = source.type === "pointsDelivery" ? maxLabelHeight * 20 || 20 : dictWidth[source.type] || 50;
       let o_source = {
-        x: source.x + 10,
-        y: source.right ? source.y + 52 : source.y + 50
+        x: source.x + maxLabelHeight * 10,
+        y: source.right ? source.y + dSourceY + 2 : source.y + dSourceY
       };
       let o_target = {
-        x: target.x + 10,
+        x: target.x + maxLabelHeight * 10,
         y: target.left ? target.y - 5 : target.y
       };
       return diagonal({
@@ -254,7 +259,7 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       }
     };
     childCount(0, root);
-    var newHeight = d3.max(levelWidth) * 100; // 25 pixels per line
+    var newHeight = maxLabelHeight * 100;
     tree = tree.size([newHeight, viewerWidth]);
 
     // Compute the new tree layout.
@@ -262,7 +267,8 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       links = tree.links(nodes);
     // Set widths between levels based on maxLabelLength.
     nodes.forEach(function (d) {
-      d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+      d.y = (d.depth * (40 * 10)); //maxLabelLength * 10px
+      //d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
       // alternatively to keep a fixed scale one can set a fixed depth per level
       // Normalize for fixed-depth by commenting out below line
       // d.y = (d.depth * 500); //500px per level.
@@ -286,13 +292,13 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     nodeEnter.append("rect")
     .attr('class', 'nodeCircle')
     .attr("rx", function (d) {
-      return dictRadius[d.type] || 0;
+      return d.type === "pointsDelivery" ? maxLabelHeight * 20 || 20 : dictRadius[d.type] || 0;
     })
     .attr("width", function (d) {
-      return dictWidth[d.type] || 50;
+      return d.type === "pointsDelivery" ? maxLabelHeight * 20 || 20 : dictWidth[d.type] || 50;
     })
     .attr("height", function (d) {
-      return dictHeight[d.type] || 20;
+      return maxLabelHeight * 20 || 20;
     })
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
@@ -301,7 +307,8 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     /**СЛЕВА**/
     nodeEnter.append("circle")
     .attr("class", function (d) {
-      return d.type === 'pointsDelivery' ? "ghost" : "nodeCircleParent";})
+      return d.type === 'pointsDelivery' ? "ghost" : "nodeCircleParent";
+    })
     .attr("r", 5)
     .style("stroke", "steelblue")
     .attr("transform", function (d) {
@@ -312,10 +319,11 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     /**СПРАВА**/
     nodeEnter.append("circle")
     .attr("class", function (d) {
-      return d.type === 'pointsDelivery' ? "ghost" : "nodeCircleChildren";})
+      return d.type === 'pointsDelivery' ? "ghost" : "nodeCircleChildren";
+    })
     .attr("r", 5)
     .attr("transform", function (d) {
-      return "translate(55,0)";
+      return `translate(${(dictWidth[d.type] || 50) + 5},0)`;
     })
     .style("stroke", "red")
     .on('click', clickChildren);
@@ -323,29 +331,31 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     /**ПОДПИСЬ узла**/
     nodeEnter.append("text")
     .attr("x", function (d) {
-      return d.children || d._children ? -10 : 10;
+      return dictWidth[d.type] / 2 || 25;
     })
     .attr("dy", 10)
     .attr('class', 'nodeText')
-    .attr("text-anchor", function (d) {
-      return d.children || d._children ? "end" : "start";
-    })
+    .attr("text-anchor", "middle")
     .text(function (d) {
       return d.name;
     })
     .style("fill-opacity", 0);
 
-    // Update the text to reflect whether node has children or not.
-    node.select('text')
+    /**Вторая подпись узла**/
+    nodeEnter.append("text")
     .attr("x", function (d) {
-      return d.children || d._children ? -10 : 10;
+      return d.type === "pointsDelivery" ? maxLabelHeight * 10 || 20 : dictWidth[d.type] / 2 || 25;
     })
-    .attr("text-anchor", function (d) {
-      return d.children || d._children ? "end" : "start";
+    .attr("dy", function (d) {
+      return (maxLabelHeight * 20 || 20) + 10;
     })
+    .attr('class', 'nodeText')
+    .attr("text-anchor", "middle")
     .text(function (d) {
-      return d.name;
-    });
+      return d.typeProperty;
+    })
+    .style("fill-opacity", 1);
+
 
     /**Обновление свойств**/
     node.select("rect.nodeCircle")
@@ -420,12 +430,13 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
     link.transition()
     .duration(duration)
     .attr("d", function (d) {
+      let dSourceY = d.source.type === "pointsDelivery" ? maxLabelHeight * 20 || 20 : dictWidth[d.source.type] || 50;
       var o_source = {
-        x: d.source.x + 10,
-        y: d.source.right ? d.source.y + 52 : d.source.y + 50
+        x: d.source.x + maxLabelHeight * 10,
+        y: d.source.right ? d.source.y + dSourceY + 2 : d.source.y + dSourceY
       };
       var o_target = {
-        x: d.target.x + 10,
+        x: d.target.x + maxLabelHeight * 10,
         y: d.target.left ? d.target.y - 5 : d.target.y
       };
       return diagonal({
