@@ -300,7 +300,8 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
 
     /**СЛЕВА**/
     nodeEnter.append("circle")
-    .attr('class', 'nodeCircleParent')
+    .attr("class", function (d) {
+      return d.type === 'pointsDelivery' ? "ghost" : "nodeCircleParent";})
     .attr("r", 5)
     .style("stroke", "steelblue")
     .attr("transform", function (d) {
@@ -310,7 +311,8 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
 
     /**СПРАВА**/
     nodeEnter.append("circle")
-    .attr('class', 'nodeCircleChildren')
+    .attr("class", function (d) {
+      return d.type === 'pointsDelivery' ? "ghost" : "nodeCircleChildren";})
     .attr("r", 5)
     .attr("transform", function (d) {
       return "translate(55,0)";
@@ -351,18 +353,12 @@ treeJSON = d3.json("flare.json", function (error, treeData) {
       return d._children ? "lightsteelblue" : "#fff";
     });
     node.select("circle.nodeCircleParent")
-    .attr("class", function (d) {
-      return d.type === 'pointsDelivery' ? "ghost" : "";
-    })
     .style("fill", function (d) {
       return d.parent && !nodes.some((node) => {
         return node.id === d.parent.id
       }) ? "lightsteelblue" : "#fff";
     });
     node.select("circle.nodeCircleChildren")
-    .attr("class", function (d) {
-      return d.type === 'pointsDelivery' ? "ghost" : "";
-    })
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
     });

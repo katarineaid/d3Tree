@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47fe17ec-6870-419d-8c85-a351f4f8f1be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dndTree.js" beforeDir="false" afterPath="$PROJECT_DIR$/dndTree.js" afterDir="false" />
     </list>
@@ -16,32 +15,32 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.46591583">
+    <splitter split-orientation="horizontal" split-proportion="0.43983403">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/index.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="435">
-                  <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/dndTree.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state>
-                  <caret column="16" selection-start-column="16" selection-end-column="16" />
+                <state relative-caret-position="150">
+                  <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/dndTree.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="456">
+                  <caret line="312" column="30" selection-start-line="312" selection-start-column="30" selection-end-line="312" selection-end-column="30" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/flare.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="315">
-                  <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
+                <state relative-caret-position="240">
+                  <caret line="16" column="12" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="12" />
                 </state>
               </provider>
             </entry>
@@ -53,8 +52,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/dndTree.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="276">
-                  <caret line="387" column="6" selection-start-line="387" selection-start-column="6" selection-end-line="387" selection-end-column="6" />
+                <state relative-caret-position="456">
+                  <caret line="356" column="59" lean-forward="true" selection-start-line="355" selection-start-column="22" selection-end-line="356" selection-end-column="59" />
                 </state>
               </provider>
             </entry>
@@ -76,12 +75,26 @@
     <findStrings>
       <find>nodeCircle</find>
       <find>id</find>
-      <find>circle</find>
       <find>Vizuali</find>
       <find>toggleChildren</find>
       <find>root</find>
       <find>treeData</find>
       <find>dragListener</find>
+      <find>mouseovered</find>
+      <find>overCircle</find>
+      <find>selectedNode</find>
+      <find>mouse</find>
+      <find>circle</find>
+      <find>pan</find>
+      <find>nodeEnter.append(&quot;circle&quot;)</find>
+      <find>lightsteelblue</find>
+      <find>links</find>
+      <find>baseSvg</find>
+      <find>highlight</find>
+      <find>start</find>
+      <find>voltage</find>
+      <find>+ 52</find>
+      <find>rx</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -115,8 +128,8 @@
         <subPane>
           <expand>
             <path>
-              <item name="d3tree" type="b2602c69:ProjectViewProjectNode" />
-              <item name="d3tree" type="462c0819:PsiDirectoryNode" />
+              <item name="d3Tree" type="b2602c69:ProjectViewProjectNode" />
+              <item name="d3Tree" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -164,6 +177,13 @@
       <updated>1559052752046</updated>
       <workItem from="1559052753181" duration="4010000" />
       <workItem from="1559117112509" duration="7220000" />
+      <workItem from="1559129741678" duration="4502000" />
+      <workItem from="1559198079671" duration="26000" />
+      <workItem from="1559299909626" duration="4393000" />
+      <workItem from="1559315919899" duration="9000" />
+      <workItem from="1559557722481" duration="2249000" />
+      <workItem from="1559563456030" duration="5323000" />
+      <workItem from="1559629340720" duration="13703000" />
     </task>
     <task id="LOCAL-00001" summary="прямоугольники">
       <created>1559056163477</created>
@@ -179,11 +199,46 @@
       <option name="project" value="LOCAL" />
       <updated>1559126514196</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="highlightLink">
+      <created>1559142535665</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1559142535666</updated>
+    </task>
+    <task id="LOCAL-00004" summary="подсвечивание линий при наведении">
+      <created>1559305057201</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1559305057201</updated>
+    </task>
+    <task id="LOCAL-00005" summary="deleted functions pan, click">
+      <created>1559306107196</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1559306107196</updated>
+    </task>
+    <task id="LOCAL-00006" summary="collapse and  expand tree with changing color handlers">
+      <created>1559573982937</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1559573982937</updated>
+    </task>
+    <task id="LOCAL-00007" summary="arrows for lines, voltageClass, type container">
+      <created>1559649449744</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1559649449744</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11230000" />
+    <option name="totallyTimeSpent" value="41435000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1053" extended-state="6" />
@@ -212,9 +267,16 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="прямоугольники" />
     <MESSAGE value="сворачивание parent узлов" />
-    <option name="LAST_COMMIT_MESSAGE" value="сворачивание parent узлов" />
+    <MESSAGE value="highlightLink" />
+    <MESSAGE value="подсвечивание линий при наведении" />
+    <MESSAGE value="deleted functions pan, click" />
+    <MESSAGE value="collapse and  expand tree with changing color handlers" />
+    <MESSAGE value="arrows for lines, voltageClass, type container" />
+    <option name="LAST_COMMIT_MESSAGE" value="arrows for lines, voltageClass, type container" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/1.html" />
@@ -225,24 +287,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/flare.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+        <state relative-caret-position="240">
+          <caret line="16" column="12" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/flare.json">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
+        <state relative-caret-position="150">
+          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dndTree.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="387" column="6" selection-start-line="387" selection-start-column="6" selection-end-line="387" selection-end-column="6" />
+        <state relative-caret-position="456">
+          <caret line="312" column="30" selection-start-line="312" selection-start-column="30" selection-end-line="312" selection-end-column="30" />
         </state>
       </provider>
     </entry>
