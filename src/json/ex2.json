@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "name": "0_ПС 110 кВ Мельничный ручей (ПС403)",
+      "type": "substation",
+      "typeProperty": "Объекты РСК",
+      "id": "518853fb-5c21-11e7-80e6-00155d0c0908",
+      "voltageClass": 110,
+      "leftChildren": false,
+      "rightChildren": false
+    },
+    {
+      "name": "1_ВЛ 110 кВ Мельничный Ручей - Щеглово (ВЛ 35 кВ Щегловская-2)",
+      "type": "powerLine",
+      "typeProperty": "Объекты РСК",
+      "id": "518853fb-5c21-11e7-80e6-00155d0c0907",
+      "voltageClass": 110,
+      "leftChildren": false,
+      "rightChildren": false
+    },
+    {
+      "name": "2",
+      "type": "substation",
+      "typeProperty": "Объекты РСК",
+      "id": "012cea47-6c2a-11e7-80e6-00155d0c8907",
+      "voltageClass": 10,
+      "leftChildren": false,
+      "rightChildren": false
+    },
+    {
+      "name": "3_ПС 35 кВ Щеглово (ПС 631)",
+      "type": "substation",
+      "typeProperty": "Объекты РСК",
+      "id": "012cea42-5c2a-11e7-80e6-00155d0c0907",
+      "voltageClass": 330,
+      "leftChildren": false,
+      "rightChildren": false
+    }
+  ],
+  "links": [
+    {
+      "source": "518853fb-5c21-11e7-80e6-00155d0c0908",
+      "target":"012cea47-6c2a-11e7-80e6-00155d0c8907",
+      "value": 1,
+      "typeConnection": "type1",
+      "left": false,
+      "right": true
+    },
+    {
+      "source":"518853fb-5c21-11e7-80e6-00155d0c0907",
+      "target":"012cea47-6c2a-11e7-80e6-00155d0c8907",
+      "value": 1,
+      "typeConnection": "type2",
+      "left": false,
+      "right": true
+    },
+    {
+      "source":"518853fb-5c21-11e7-80e6-00155d0c0907",
+      "target": "012cea42-5c2a-11e7-80e6-00155d0c0907",
+      "value": 1,
+      "typeConnection": "type3",
+      "left": false,
+      "right": true
+    },
+
+    {
+      "source":"012cea47-6c2a-11e7-80e6-00155d0c8907",
+      "target": "012cea42-5c2a-11e7-80e6-00155d0c0907",
+      "value": 1,
+      "typeConnection": "type4",
+      "left": false,
+      "right": true
+    },
+    {
+      "source": "012cea42-5c2a-11e7-80e6-00155d0c0907",
+      "target":"012cea42-5c2a-11e7-80e6-00155d0c0907",
+      "value": 4,
+      "typeConnection": "type2",
+      "left": false,
+      "right": true
+    }
+  ]
+}
