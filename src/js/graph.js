@@ -58,7 +58,7 @@ function graphJSON(error, graph) {
   .style("pointer-events", "all")
   .call(zoomListener);
 
-  svgGroup = svg.append("g");
+  svgGroup = svg.append("g").attr('id', 'svgGroup');
 
 
   function centerNode(source) {
@@ -85,8 +85,8 @@ function graphJSON(error, graph) {
   // Set the sankey diagram properties
   d3.sankey = sanKey;
   var sankey = d3.sankey(maxLabelHeight, dictWidth)
-  .nodeWidth(0)
-  .nodePadding(290)
+  .nodeWidth(330)
+  .nodeHeight(maxLabelHeight * 20 + 30 || 50)
   .size([width, height]);
 
 
@@ -100,7 +100,7 @@ function graphJSON(error, graph) {
   function clickOutBox(d) {
     if (d._sourceLinks.length) {
       expandOutBox(d, svgGroup)
-    } else if (!d._sourceLinks.length && !d.sourceLinks.length) {
+    } else if (!d._sourceLinks.length && !d.sourceLinks.length && d.rightChildren) {
       sendTo1C('click', { nameEvent: "getOutBox", id: d.id })
     } else {
       collapseOutBox(d, svgGroup)
@@ -110,7 +110,7 @@ function graphJSON(error, graph) {
   function clickInBox(d) {
     if (d._targetLinks.length) {
       expandInBox(d, svgGroup)
-    } else if (!d._targetLinks.length && !d.targetLinks.length) {
+    } else if (!d._targetLinks.length && !d.targetLinks.length && d.leftChildren) {
       sendTo1C('click', { nameEvent: "getInBox", id: d.id })
     } else {
       collapseInBox(d, svgGroup)
@@ -157,7 +157,7 @@ function graphJSON(error, graph) {
   // add in the nodes
   var node = svgGroup.append("g")
   .selectAll(".node")
-  .data(graph.nodes)
+  .data(sankey.nodes())
   .enter().append("g")
   .attr("class", "node")
   .attr('id', (d) => {
@@ -231,11 +231,13 @@ function graphJSON(error, graph) {
   node.select("use.parentMarker")
   .attr('xlink:href', (d) => {
     if (d.type === 'pointsDelivery') return "";
+    if (!d._targetLinks.length && !d.targetLinks.length && d.leftChildren) return `#plus`;
     return d._targetLinks.length ? `#plus` : `#minus`;
   });
   node.select("use.childrenMarker")
   .attr('xlink:href', (d) => {
     if (d.type === 'pointsDelivery') return "";
+    if(!d._sourceLinks.length && !d.sourceLinks.length && d.rightChildren) return `#plus`;
     return d._sourceLinks.length ? `#plus` : `#minus`;
   });
 

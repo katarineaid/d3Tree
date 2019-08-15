@@ -2,6 +2,7 @@ function changeParentMarker(id, svgGroup) {
   const marker = svgGroup.selectAll(`#node-${id}`).select("use.parentMarker")
   .attr('xlink:href', (d) => {
     if (d.type === 'pointsDelivery') return "";
+    if (!d._targetLinks.length && !d.targetLinks.length && d.leftChildren) return `#plus`;
     return d._targetLinks.length ? `#plus` : `#minus`;
   });
 }
@@ -59,5 +60,6 @@ function expandInBox(d, svgGroup) {
 
 export {
   collapseInBox,
-  expandInBox
+  expandInBox,
+  changeParentMarker
 }

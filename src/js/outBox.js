@@ -2,10 +2,13 @@ function changeChildrenMarker(id, svgGroup) {
   const marker = svgGroup.selectAll(`#node-${id}`).select("use.childrenMarker")
   .attr('xlink:href', (d) => {
     if (d.type === 'pointsDelivery') return "";
+    if (!d._targetLinks.length && !d.targetLinks.length && d.leftChildren) return `#plus`;
+    if(!d._sourceLinks.length && !d.sourceLinks.length && d.rightChildren) return `#plus`;
     return d._sourceLinks.length ? `#plus` : `#minus`;
   });
 }
-function collapseOutBox(d,svgGroup) {
+
+function collapseOutBox(d, svgGroup) {
   d._sourceLinks = [...d._sourceLinks, ...d.sourceLinks];
   const svgRingLinks = svgGroup.selectAll(`#link-${d.id}-${d.id}`)
   .attr("opacity", 0);
@@ -14,18 +17,19 @@ function collapseOutBox(d,svgGroup) {
     .attr("opacity", 0);
     const { target } = link;
     const { targetLinks } = target;
-    targetLinks.map((targetLink, index) => {
-      if (targetLink.source.node === d.node) {
-        target._targetLinks.push(targetLink);
-        target.targetLinks.splice(index, 1);
+    if (d.x < target.x) {
+      targetLinks.map((targetLink, index) => {
+        if (targetLink.source.node === d.node) {
+          target._targetLinks.push(targetLink);
+          target.targetLinks.splice(index, 1);
+        }
+      });
+      if (targetLinks.length === 0) {
+        const svgTargetNode = svgGroup.selectAll(`#node-${target.id}`)
+        .attr("opacity", 0);
+        collapseOutBox(target, svgGroup)
       }
-    });
-    if (targetLinks.length === 0) {
-      const svgTargetNode = svgGroup.selectAll(`#node-${target.id}`)
-      .attr("opacity", 0);
-      collapseOutBox(target,svgGroup)
     }
-
   });
   d.sourceLinks = [];
   changeChildrenMarker(d.id, svgGroup)
@@ -61,5 +65,6 @@ function expandOutBox(d, svgGroup) {
 
 export {
   collapseOutBox,
-  expandOutBox
+  expandOutBox,
+  changeChildrenMarker
 }
