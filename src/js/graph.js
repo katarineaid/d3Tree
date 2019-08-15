@@ -26,7 +26,8 @@ function graphJSON(error, graph) {
 
   graph.nodes.map((node) => {
     maxLabelLength = Math.max(node.name.length, maxLabelLength);
-    maxLabelHeight = Math.max(node.name.length / 20, maxLabelHeight);
+    const countString = Math.ceil(node.name.length / 20);
+    maxLabelHeight = Math.max(countString, maxLabelHeight);
   });
 
   function zoomed() {
